@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 
@@ -36,12 +37,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.lessonapp.R
+import com.example.lessonapp.VMs.HeroScreenVM
 import com.example.lessonapp.VMs.HeroesState
 import com.example.lessonapp.VMs.HomeScreenVM
 import com.example.lessonapp.VMs.IViewModel
+import com.example.lessonapp.database.AppDatabase
 
 val interFontFamily = FontFamily(
     Font(R.font.inter_extrabold),
@@ -49,9 +54,16 @@ val interFontFamily = FontFamily(
     Font(R.font.inter_bold)
 )
 
+class HomeScreenVMFactory(private val db: AppDatabase) :
+    ViewModelProvider.NewInstanceFactory() {
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = HomeScreenVM(db) as T
+}
+
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
-fun HomeScreen(navController: NavController, vm: HomeScreenVM = viewModel()) {
+fun HomeScreen(navController: NavController, vm: HomeScreenVM = viewModel(factory = HomeScreenVMFactory(AppDatabase.getDatabase(
+    LocalContext.current)))) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp

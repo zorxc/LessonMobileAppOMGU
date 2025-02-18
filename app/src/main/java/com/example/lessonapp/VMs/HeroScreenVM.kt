@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.lessonapp.database.AppDatabase
 import com.example.lessonapp.marvel.client.MarvelApiClient
 import com.example.lessonapp.marvel.client.generateHash
 import com.example.lessonapp.models.Character
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-class HeroScreenVM(private val characterId: Long) : ViewModel(), IViewModel {
+class HeroScreenVM(private val characterId: Long, private val db: AppDatabase) : ViewModel(), IViewModel {
     private val _state = MutableStateFlow<HeroState>(HeroState.Loading)
     val state: StateFlow<HeroState> = _state
 
