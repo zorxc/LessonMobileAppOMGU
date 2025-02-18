@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,16 +33,18 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.lessonapp.R
 import com.example.lessonapp.VMs.HeroScreenVM
 import com.example.lessonapp.VMs.HeroState
+import com.example.lessonapp.database.AppDatabase
 
-class HeroScreenVMFactory(private val heroId: Long) :
+class HeroScreenVMFactory(private val heroId: Long, private val db: AppDatabase) :
     ViewModelProvider.NewInstanceFactory() {
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    override fun <T : ViewModel> create(modelClass: Class<T>): T = HeroScreenVM(heroId) as T
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = HeroScreenVM(heroId, db) as T
 }
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
-fun HeroScreen(heroId: Long, navController: NavController, vm: HeroScreenVM = viewModel(factory = HeroScreenVMFactory(heroId))) {
+fun HeroScreen(heroId: Long, navController: NavController, vm: HeroScreenVM = viewModel(factory = HeroScreenVMFactory(heroId,
+    AppDatabase.getDatabase(LocalContext.current)))) {
     val state by vm.state.collectAsState()
 
     Box(

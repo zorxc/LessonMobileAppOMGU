@@ -18,9 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lessonapp.models.Character
+import com.example.lessonapp.models.CharacterUI
 
 @Composable
-fun HeroCard(hero: Character, onClickHero: () -> Unit) {
+fun HeroCard(hero: CharacterUI, onClickHero: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(all = 10.dp)
@@ -30,7 +31,7 @@ fun HeroCard(hero: Character, onClickHero: () -> Unit) {
     ) {
         Box(
             modifier = Modifier.fillMaxSize().paint(
-                painter = rememberAsyncImagePainter(model = hero.thumbnail.fullPath()),
+                painter = rememberAsyncImagePainter(model = hero.thumbnailUrl),
                 contentScale = ContentScale.FillBounds
             ),
             contentAlignment = Alignment.BottomStart
